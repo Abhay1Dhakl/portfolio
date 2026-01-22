@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # PostgreSQL Database
   postgres:
@@ -17,7 +15,7 @@ services:
     networks:
       - portfolio_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U portfolio_user"]
+      test: ["CMD-SHELL", "pg_isready -U portfolio_user -d portfolio_db"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -35,9 +33,9 @@ services:
       DB_USER: portfolio_user
       DB_PASSWORD: portfolio_password
       DB_NAME: portfolio_db
-      PORT: 5000
+      PORT: 5001
     ports:
-      - "5000:5000"
+      - "5001:5001"
     depends_on:
       postgres:
         condition: service_healthy
@@ -55,7 +53,7 @@ services:
       dockerfile: Dockerfile
     container_name: portfolio_frontend
     environment:
-      VITE_API_URL: http://localhost:5000/api
+      VITE_API_URL: http://localhost:5001/api
     ports:
       - "3000:3000"
     depends_on:
